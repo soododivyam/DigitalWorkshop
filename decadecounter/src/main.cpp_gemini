@@ -1,0 +1,79 @@
+#include <Arduino.h>
+
+// Inputs from 7474 (Current State)
+int W,X,Y,Z; // (W=LSB, Z=MSB)
+
+// Outputs to 7447 (Calculated Next State)
+int A,B,C,D; // (A=LSB, D=MSB)
+
+// Pin for the counter's clock
+int CLOCK_PIN = 10; 
+
+void disp_7447(int D, int C, int B, int A)
+{
+  digitalWrite(5, D); //MSB
+  digitalWrite(4, C); 
+  digitalWrite(3, B); 
+  digitalWrite(2, A); //LSB
+}
+
+void setup(){
+    Serial.begin(9600);
+    
+    // Outputs to 7447
+    pinMode(2, OUTPUT);
+    pinMode(3, OUTPUT);
+    pinMode(4, OUTPUT);
+    pinMode(5, OUTPUT);
+
+    // Output to 7474 Clock
+    pinMode(CLOCK_PIN, OUTPUT);
+    digitalWrite(CLOCK_PIN, LOW); // Start with clock low
+
+    // Inputs from 7474
+    pinMode(6, INPUT); // W (LSB)
+    pinMode(7, INPUT); // X
+    pinMode(8, INPUT); // Y
+    pinMode(9, INPUT); // Z (MSB)
+
+    // Onboard LED
+    pinMode(13, OUTPUT);
+}
+
+void loop(){
+    // 1. Read the CURRENT stable state from the counter
+    W = digitalRead(6); //LSB
+    X = digitalRead(7);
+    Y = digitalRead(8);
+    Z = digitalRead(9); //MSB   
+  
+    // 2. Calculate the NEXT state (N+1) using your logic
+    A = !W;
+    B = W&&!X&&!Z || !W&&X;
+    C = !X&&Y || !W&&Y || W&&X&&!Y;
+    D = !W&&Z || W&&X&&Y;
+     
+    // 3. Display the calculated NEXT state on the 7-segment
+    disp_7447(D,C,B,A);
+
+    // 4. Print what you are displaying (for debugging)
+    Serial.print("Input (ZYXW) was: ");
+    Serial.print(Z); Serial.print(Y); Serial.print(X); Serial.print(W);
+    Serial.print(" | Displaying (DCBA): ");
+    Serial.print(D); Serial.print(" "); Serial.print(C); Serial.print(" ");
+    Serial.print(B); Serial.print(" "); Serial.println(A);
+    
+    // 5. Wait for 1 second and blink the LED
+    digitalWrite(13, HIGH);
+    delay(1000); // This delay sets your counter speed
+    digitalWrite(13, LOW);
+    // delay(1000); // No need for this second delay
+
+    // 6. Send ONE clock pulse to the 7474 counter
+    // This tells it to advance to the next number.
+    digitalWrite(CLOCK_PIN, HIGH);
+    delayMicroseconds(100); // A small delay to ensure the pulse is read
+    digitalWrite(CLOCK_PIN, LOW);
+    
+    // The loop will now repeat, reading the new stable number.
+}
