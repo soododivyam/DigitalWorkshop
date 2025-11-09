@@ -1,7 +1,6 @@
 ;program to complement a boolean
 
- 
-.include "/home/gadepall/m328Pdef.inc"
+.include "/home/ubuntu/DigitalWorkshop/part2/assembly/m328Pdef.inc"
 
 ldi r16, 0b00111100 ;identifying output pins 2,3,4,5
 out DDRD,r16		;declaring pins as output
