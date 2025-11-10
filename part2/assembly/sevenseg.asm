@@ -2,7 +2,7 @@
 ;displaying number on
 ;seven segment display
 
-.include "/home/ubuntu/DigitalWorkshop/part2/assembly/m328Pdef.inc"
+.include "/home/ubuntu/DigitalWorkshop/part2/m328Pdef.inc"
 
   
 ;Configuring pins 2-7 (PD2-PD7) of Arduino

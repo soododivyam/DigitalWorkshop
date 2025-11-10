@@ -1,4 +1,4 @@
 #ignore these files
 part2/assembly/*.hex
 part2/assembly/*.obj
-
+part2/.pio/*
