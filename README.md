@@ -1,5 +1,5 @@
 # DigitalWorkshop
-You can read about my experiences about the workshop at my blog: https://divyamsood.com/blog/digital-design-workshop/
+You can read about my experiences during the workshop at my blog: https://divyamsood.com/blog/digital-design-workshop/
 
 Repository made to upload codes made as part of workshop conducted by Dr. GVV Sharma in IISERB
 
